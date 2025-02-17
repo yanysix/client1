@@ -5,12 +5,12 @@ let app = new Vue({
         description: "A pair of warm, fuzzy socks",
         image: "./assets/vmSocks-blue-onWhite.jpg",
         altText: "A pair of socks",
-        inStock: false,
+        inStock: true,
         details: ['80% cotton', '20% polyester', 'Gender-neutral'],
         variants: [
             {
                 variantId: 2234,
-                variantColor: 'lime',
+                variantColor: 'green',
                 variantImage: "./assets/vmSocks-green-onWhite.jpg",
             },
             {
