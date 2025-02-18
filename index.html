@@ -19,15 +19,15 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
             <img :src="image" :alt="altText" />
         </div>
         <div class="product-info">
-            <h1>{{ product }}</h1>
+            <h1>{{ title }}</h1>
             <p v-if="inStock">In stock</p>
             <p v-else :class="{ 'line-through': !inStock }">Out of Stock</p>
             <ul>
                 <p style="font-size: 20px">Состав</p>
                 <li v-for="detail in details">{{ detail }}</li>
             </ul>
-            <div v-for="variant in variants" :key="variant.variantId"
-                 class="variant" :style="{ backgroundColor: variant.variantColor }" @mouseover="updateProduct(variant.variantImage)">
+            <div v-for="(variant, index) in variants" :key="variant.variantId"
+                 class="variant" :style="{ backgroundColor: variant.variantColor }" @mouseover="updateProduct(index)">
             </div>
             <ul>
                 <li v-for="size in sizes" >{{ size }}</li>
