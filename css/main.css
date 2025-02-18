@@ -32,15 +32,8 @@ img {
     margin-top: 10px;
     width: 50%;
 }
-.product-info ul {
-    border: 2px solid #000;
-    height: 150px;
-    width: 20%;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
+
 .variant {
     width: 50px;
     height: 50px;
