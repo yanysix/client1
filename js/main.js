@@ -32,8 +32,20 @@ class="variant" :style="{ backgroundColor: variant.variantColor }" @mouseover="u
                     :class="{ disabledButton: !inStock }">Add to cart</button>
             <button v-on:click="decreaseCart" :disabled="!inStock"
                     :class="{ disabledButton: !inStock }">Delete</button>
-           
+                  
+  </div>
+        <div>
+          <h2>Reviews</h2>
+          <p v-if="!reviews.length">There are no reviews yet.</p>
+          <ul>
+            <li v-for="review in reviews">
+              <p>{{ review.name }}</p>
+              <p>Rating: {{ review.rating }}</p>
+              <p>{{ review.review }}</p>
+            </li>
+          </ul>
         </div>
+        <product-review @review-submitted="addReview"></product-review>
     </div>
 `,
     data() {
@@ -64,7 +76,10 @@ class="variant" :style="{ backgroundColor: variant.variantColor }" @mouseover="u
             updateProduct(index) {
                 this.selectedVariant = index;
                 console.log(index);
+
+
             },
+            reviews: [],
         }
     },
     methods: {
@@ -75,6 +90,9 @@ class="variant" :style="{ backgroundColor: variant.variantColor }" @mouseover="u
         decreaseCart() {
             this.$emit('delete-to-cart',
                 this.variants[this.selectedVariant].variantId);
+        },
+        addReview(productReview) {
+            this.reviews.push(productReview)
         }
     },
     computed: {
@@ -108,6 +126,75 @@ Vue.component('product-details', {
     data() {
         return {
             details: ['80% cotton', '20% polyester', 'Gender-neutral']
+        }
+    }
+})
+Vue.component('product-review', {
+    template: `
+    <form class="review-form" @submit.prevent="onSubmit">
+    <p v-if="errors.length">
+      <b>Please correct the following error(s):</b>
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
+    </p>
+      <p>
+        <label for="name">Name:</label>
+        <input id="name" v-model="name" placeholder="name">
+      </p>
+      <p>
+        <label for="review">Review:</label>
+        <textarea id="review" v-model="review"></textarea>
+      </p>
+      <p>
+         <label for="rating">Rating:</label>
+         <select id="rating" v-model.number="rating">
+            <option>5</option>
+            <option>4</option>
+            <option>3</option>
+            <option>2</option>
+            <option>1</option>
+         </select>
+      </p>
+      <label for="recommend" >Would you recommend this product?</label><br>
+             <input type="radio" id="yes" name="recommend" value="yes">
+             <label for="yes" >Yes</label><br>
+             <input type="radio" id="no" name="recommend" value="no">
+             <label for="no" >No</label><br>
+      <p>
+        <input type="submit" value="Submit">
+      </p>
+</form>
+`,
+    data() {
+        return {
+            name: null,
+            review: null,
+            rating: null,
+            errors: [],
+            recommended: null,
+        }
+    },
+    methods:{
+        onSubmit() {
+            if(this.name && this.review && this.rating && this.recommend !== null) {
+                let productReview = {
+                    name: this.name,
+                    review: this.review,
+                    rating: this.rating,
+                    recommend: this.recommend
+                }
+                this.$emit('review-submitted', productReview)
+                this.name = null
+                this.review = null
+                this.rating = null
+                this.recommend = null
+            } else {
+                if(!this.name) this.errors.push("Name required.")
+                if(!this.review) this.errors.push("Review required.")
+                if(!this.rating) this.errors.push("Rating required.")
+                if (this.recommend === null) this.errors.push("Recommendation required.")
+            }
         }
     }
 })
